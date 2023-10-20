@@ -5,7 +5,7 @@
 .type __set_thread_area,@function
 __set_thread_area:
 	mov %rdi,%rsi           /* shift for syscall */
-	movl $0x1002,%edi       /* SET_FS register */
-	movl $158,%eax          /* set fs segment to */
-	syscall                 /* arch_prctl(SET_FS, arg)*/
+	movq $0x1002,%r8       /* SET_FS register */
+	movq $158,%rax          /* set fs segment to */
+	int $0x80                 /* arch_prctl(SET_FS, arg)*/
 	ret
