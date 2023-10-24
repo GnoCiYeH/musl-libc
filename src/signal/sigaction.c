@@ -62,6 +62,7 @@ int __libc_sigaction(int sig, const struct sigaction *restrict sa, struct sigact
 
 int __sigaction(int sig, const struct sigaction *restrict sa, struct sigaction *restrict old)
 {
+	return 0;
 	unsigned long set[_NSIG/(8*sizeof(long))];
 
 	if (sig-32U < 3 || sig-1U >= _NSIG-1) {
