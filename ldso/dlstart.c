@@ -124,37 +124,37 @@ hidden void _dlstart_c(size_t *sp, size_t *dynv)
 			local_cnt = dynv[i+1];
 		for (i=0; i<local_cnt; i++) got[i] += base;
 	}
+	
+	// rel = (void *)(base+dyn[DT_REL]);
+	// rel_size = dyn[DT_RELSZ];
+	// for (; rel_size; rel+=2, rel_size-=2*sizeof(size_t)) {
+	// 	if (!IS_RELATIVE(rel[1], 0)) continue;
+	// 	size_t *rel_addr = (void *)(base + rel[0]);
+	// 	*rel_addr += base;
+	// }
 
-	rel = (void *)(base+dyn[DT_REL]);
-	rel_size = dyn[DT_RELSZ];
-	for (; rel_size; rel+=2, rel_size-=2*sizeof(size_t)) {
-		if (!IS_RELATIVE(rel[1], 0)) continue;
-		size_t *rel_addr = (void *)(base + rel[0]);
-		*rel_addr += base;
-	}
+	// rel = (void *)(base+dyn[DT_RELA]);
+	// rel_size = dyn[DT_RELASZ];
+	// for (; rel_size; rel+=3, rel_size-=3*sizeof(size_t)) {
+	// 	if (!IS_RELATIVE(rel[1], 0)) continue;
+	// 	size_t *rel_addr = (void *)(base + rel[0]);
+	// 	*rel_addr = base + rel[2];
+	// }
 
-	rel = (void *)(base+dyn[DT_RELA]);
-	rel_size = dyn[DT_RELASZ];
-	for (; rel_size; rel+=3, rel_size-=3*sizeof(size_t)) {
-		if (!IS_RELATIVE(rel[1], 0)) continue;
-		size_t *rel_addr = (void *)(base + rel[0]);
-		*rel_addr = base + rel[2];
-	}
-
-	rel = (void *)(base+dyn[DT_RELR]);
-	rel_size = dyn[DT_RELRSZ];
-	size_t *relr_addr = 0;
-	for (; rel_size; rel++, rel_size-=sizeof(size_t)) {
-		if ((rel[0]&1) == 0) {
-			relr_addr = (void *)(base + rel[0]);
-			*relr_addr++ += base;
-		} else {
-			for (size_t i=0, bitmap=rel[0]; bitmap>>=1; i++)
-				if (bitmap&1)
-					relr_addr[i] += base;
-			relr_addr += 8*sizeof(size_t)-1;
-		}
-	}
+	// rel = (void *)(base+dyn[DT_RELR]);
+	// rel_size = dyn[DT_RELRSZ];
+	// size_t *relr_addr = 0;
+	// for (; rel_size; rel++, rel_size-=sizeof(size_t)) {
+	// 	if ((rel[0]&1) == 0) {
+	// 		relr_addr = (void *)(base + rel[0]);
+	// 		*relr_addr++ += base;
+	// 	} else {
+	// 		for (size_t i=0, bitmap=rel[0]; bitmap>>=1; i++)
+	// 			if (bitmap&1)
+	// 				relr_addr[i] += base;
+	// 		relr_addr += 8*sizeof(size_t)-1;
+	// 	}
+	// }
 #endif
 
 	stage2_func dls2;
