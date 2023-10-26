@@ -1,7 +1,6 @@
 #define _GNU_SOURCE
 #include "pthread_impl.h"
 #include <sys/mman.h>
-
 static void dummy1(pthread_t t)
 {
 }
